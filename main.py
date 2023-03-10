@@ -5,8 +5,8 @@ from Model import *
 image_size = 224
 batch_size = 32
 dataset_path = "train_small"
-classes = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-           "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+classes = ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Л", "М", "Н",
+           "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Ь", "Ы", "Э", "Ю", "Я"]
 
 data_augmentation = tf.keras.models.Sequential([
     layers.RandomFlip("horizontal", seed=321, input_shape=(image_size, image_size, 3)),
