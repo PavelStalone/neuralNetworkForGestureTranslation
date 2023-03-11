@@ -4,7 +4,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 layers = tf.keras.layers
 
-
 class Model:
     def __init__(self, cnn_model, image_size, batch_size, classes):
         self.model = tf.keras.models.Sequential()
@@ -66,10 +65,12 @@ class Model:
 
         plt.figure(figsize=(8, 8))
         plt.subplot(1, 2, 1)
-        plt.plot(epochs_range, acc)
-        plt.plot(epochs_range, val_acc)
+        plt.plot(epochs_range, acc, label="Train acc")
+        plt.plot(epochs_range, val_acc, label="Val acc")
+        plt.legend(loc="upper left")
         plt.subplot(1, 2, 2)
-        plt.plot(epochs_range, loss)
-        plt.plot(epochs_range, val_loss)
+        plt.plot(epochs_range, loss, lebel="Train loss")
+        plt.plot(epochs_range, val_loss, label="Val loss")
+        plt.legend(loc="upper left")
         plt.show()
 
