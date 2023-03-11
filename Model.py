@@ -69,7 +69,7 @@ class Model:
         plt.plot(epochs_range, val_acc, label="Val acc")
         plt.legend(loc="upper left")
         plt.subplot(1, 2, 2)
-        plt.plot(epochs_range, loss, lebel="Train loss")
+        plt.plot(epochs_range, loss, label="Train loss")
         plt.plot(epochs_range, val_loss, label="Val loss")
         plt.legend(loc="upper left")
         plt.show()
