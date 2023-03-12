@@ -37,7 +37,7 @@ class Model:
         predictions = self.model.predict(img_array, verbose=0)
         score = tf.nn.softmax(predictions[0])
         answer = self.classes[np.argmax(score)]
-        return answer
+        return answer, round(float(max(score) * 100), 2)
 
     def prepare_ds(self, data, optimise):
         train_ds = tf.keras.utils.image_dataset_from_directory(
