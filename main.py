@@ -44,6 +44,6 @@ model.generate(name="sl_classification_1", data=dataset_path,
 #     epochs=20, optimise=False, show_history=True)
 
 # for file in os.listdir("test"):
-#     answer = model.test(f"test/{file}")
-#     print(f"predict {answer} on {file}")
+#     answer, score = model.test(f"test/{file}")
+#     print(f"predict {answer} on {file} with {score} percents")
 
