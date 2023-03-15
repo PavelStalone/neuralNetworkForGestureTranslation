@@ -1,0 +1,66 @@
+import os
+
+import tensorflow as tf
+import pandas as pd
+from keras.layers import Dense,  GlobalAveragePooling2D
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Model
+import keras
+
+IMAGE_SIZE = 255
+BATCH_SIZE = 8
+SEED = 321
+DATA_SET_PATH = "path"
+
+classes = os.listdir(DATA_SET_PATH)
+print(classes)
+
+train_df = pd.DataFrame(columns=['image', 'class'])
+val_df = pd.DataFrame(columns=['image', 'class'])
+
+for label in classes:
+    images = os.listdir(f"{DATA_SET_PATH}/{label}")
+    for image in images[:-200]:
+        train_df = pd.concat(
+            [train_df, pd.DataFrame.from_records([{'image': f"./{DATA_SET_PATH}/{label}/{image}", 'class': label}])],
+            ignore_index=True)
+
+    for image in images[-200:]:
+        val_df = pd.concat([val_df, pd.DataFrame.from_records([{'image': f"./{DATA_SET_PATH}/{label}/{image}",
+                                                                'class': label}])],
+                           ignore_index=True)
+
+print(train_df.head())
+
+train_datagen = ImageDataGenerator(
+    rotation_range=10,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    rescale=1 / 255,
+)
+
+val_datagen = ImageDataGenerator(
+    rescale=1 / 255
+)
+
+train_generator = train_datagen.flow_from_dataframe(train_df, x_col='image', y_col='class', classes=classes,
+                                                    batch_size=BATCH_SIZE)
+val_generator = val_datagen.flow_from_dataframe(val_df, x_col='image', y_col='class', classes=classes,
+                                                batch_size=BATCH_SIZE)
+layers = tf.keras.layers
+
+from keras.applications.xception import Xception
+
+xception = Xception(include_top=False, input_shape=(IMAGE_SIZE, IMAGE_SIZE, 3), classes=len(classes))
+xception.trainable = False
+last_layer = xception.layers[-1].output
+x = GlobalAveragePooling2D()(last_layer)
+x = Dense(len(classes), activation='softmax')(x)
+model = Model(xception.inputs, x)
+model.summary()
+model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.RMSprop(learning_rate=0.001), metrics=['acc'])
+history = model.fit(train_generator, epochs=2, validation_data=val_generator)
+model.save("best_model")
