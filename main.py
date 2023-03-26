@@ -17,20 +17,32 @@ data_augmentation = tf.keras.models.Sequential([
 ])
 cnn_model = tf.keras.models.Sequential([
     data_augmentation,
-    layers.Conv2D(16, (3, 3), padding="same", activation='relu'),
-    layers.MaxPooling2D((2, 2), strides=2),
-    layers.Conv2D(16, (3, 3), padding="same", activation='relu'),
-    layers.MaxPooling2D((2, 2), strides=2),
-    layers.Conv2D(32, (3, 3), padding="same", activation='relu'),
-    layers.MaxPooling2D((2, 2), strides=2),
-    layers.Conv2D(32, (3, 3), padding="same", activation='relu'),
-    layers.MaxPooling2D((2, 2), strides=2),
+
     layers.Conv2D(64, (3, 3), padding="same", activation='relu'),
-    layers.MaxPooling2D((2, 2), strides=2),
-    layers.Dropout(0.3),
+    layers.Conv2D(64, (3, 3), padding="same", activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+
+    layers.Conv2D(128, (3, 3), padding="same", activation='relu'),
+    layers.Conv2D(128, (3, 3), padding="same", activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+
+    layers.Conv2D(256, (3, 3), padding="same", activation='relu'),
+    layers.Conv2D(256, (3, 3), padding="same", activation='relu'),
+    layers.Conv2D(256, (3, 3), padding="same", activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+
+    layers.Conv2D(512, (3, 3), padding="same", activation='relu'),
+    layers.Conv2D(512, (3, 3), padding="same", activation='relu'),
+    layers.Conv2D(412, (3, 3), padding="same", activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Dropout(0.2),
+
     layers.Flatten(),
-    layers.Dense(128, activation='relu'),
-    layers.Dense(len(classes), activation="softmax")
+    layers.Dense(4096, activation='relu'),
+    layers.Dense(4096, activation='relu'),
+    layers.Dense(1000, activation='relu'),
+    layers.Dropout(0.2),
+    layers.Dense(num_classes, activation="softmax")
 ])
 
 model = Model(cnn_model, image_size, batch_size, classes)
